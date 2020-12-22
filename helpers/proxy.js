@@ -6,14 +6,31 @@ module.exports = {
       const response = await fetch(
         `https://api.duckduckgo.com/?q=${query}&format=json`
       );
-      const data = await response.json();
-      const touchedData = data.RelatedTopics.map((topic) => {
-        return {
-          title: topic.Text,
-          url: topic.FirstURL,
-        };
+      const responseData = await response.json();
+      let topicData = [];
+      let relatedTopicsData = [];
+      relatedTopicsData = responseData.RelatedTopics.map((topic) => {
+        if (topic.Text && topic.FirstURL) {
+          return {
+            title: topic.Text,
+            url: topic.FirstURL,
+          };
+        }
+        if (topic.Topics) {
+          const exctractedTopics = topic.Topics.map((topicItem) => {
+            return {
+              title: topicItem.Text,
+              url: topicItem.FirstURL,
+            };
+          });
+          topicData = [...topicData, ...exctractedTopics];
+        }
       });
-      return [touchedData, null];
+      const filteredRelatedTopicsData = relatedTopicsData.filter((item) => {
+        item !== null || item !== undefined;
+      });
+      const duckData = [...filteredRelatedTopicsData, ...topicData];
+      return [duckData, null];
     } catch (error) {
       return [null, error];
     }
