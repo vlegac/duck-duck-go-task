@@ -15,6 +15,13 @@ app.use(bodyParser.json());
 // Enable CORS
 app.use(cors());
 
+// Info GET endpoint
+app.get("/info", (req, res, next) => {
+  res.send(
+    "This is a proxy service which proxies to Billing and Account APIs."
+  );
+});
+
 // Error handler if in url is neither of api calls from above
 app.use((req, res, next) => {
   const error = new Error("Not found");
