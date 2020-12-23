@@ -1,14 +1,13 @@
-import React from "react";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
-import { sideBarStyles } from "./styles";
-import { useSelector, useDispatch } from "react-redux";
+import Typography from "@material-ui/core/Typography";
 import axios from "axios";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { HistoryItem } from "./HistoryItem/HistoryItem";
+import { sideBarStyles } from "./styles";
 
 export const Sidebar = () => {
   const classes = sideBarStyles();
@@ -31,13 +30,13 @@ export const Sidebar = () => {
   return (
     <Drawer
       variant="permanent"
+      className={classes.drawer}
       classes={{
         paper: classes.drawerPaper,
       }}
       implementation="css"
       open
     >
-      <Toolbar />
       <div className={classes.searchHistory}>
         <Typography variant="h6">Search History</Typography>
       </div>

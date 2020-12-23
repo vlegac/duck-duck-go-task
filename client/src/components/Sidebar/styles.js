@@ -8,14 +8,15 @@ export const sideBarStyles = makeStyles((theme) => ({
     padding: "0 8px",
     ...theme.mixins.toolbar,
   },
+  drawer: {
+    height: "100%",
+  },
   drawerPaper: {
+    overflow: "auto",
     position: "relative",
     whiteSpace: "nowrap",
     width: drawerWidth,
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
+    height: "100%",
   },
   links: {
     width: "100%",

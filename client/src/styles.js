@@ -3,6 +3,8 @@ const drawerWidth = 240;
 export const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
+    height: "100%",
+    maxHeight: "100%",
   },
   toolbar: {
     paddingRight: 24, // keep right padding when drawer closed
@@ -15,11 +17,10 @@ export const useStyles = makeStyles((theme) => ({
     ...theme.mixins.toolbar,
   },
   appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
-    }),
+    [theme.breakpoints.up("sm")]: {
+      width: `calc(100% - ${drawerWidth}px)`,
+      marginLeft: drawerWidth,
+    },
   },
   appBarShift: {
     marginLeft: drawerWidth,
@@ -42,6 +43,7 @@ export const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("sm")]: {
       width: drawerWidth,
       flexShrink: 0,
+      overflow: "auto",
     },
   },
   drawerPaper: {
@@ -64,10 +66,12 @@ export const useStyles = makeStyles((theme) => ({
       width: theme.spacing(9),
     },
   },
-  appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
+    height: "100%",
+    maxHeight: "100%",
+    overflow: "auto",
   },
   container: {
     paddingTop: theme.spacing(4),
