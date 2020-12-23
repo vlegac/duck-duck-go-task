@@ -31,9 +31,7 @@ const App = () => {
         <Sidebar />
       </nav>
       <main className={classes.content}>
-        <div className={classes.appBarSpacer}>
-          <Topics />
-        </div>
+        <Topics />
       </main>
     </div>
   );
