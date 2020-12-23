@@ -5,12 +5,13 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
+import Toolbar from "@material-ui/core/Toolbar";
 
 export const Topics = () => {
-  const allTopics = useSelector((state) => state.topics);
+  const topicsState = useSelector((state) => state.topics);
   const dispatch = useDispatch();
 
-  const [searchTerm, setSearchTerm] = React.useState("");
+  const [searchTerm, setSearchTerm] = React.useState(topicsState.searchValue);
   const handleChange = React.useCallback((event) => {
     setSearchTerm(event.target.value);
   }, []);
@@ -26,21 +27,34 @@ export const Topics = () => {
     };
   }, [searchTerm]);
 
+  const appendHistory = React.useCallback(() => {
+    return (dispatch) => {
+      dispatch({
+        type: "UPDATE_HISTORY",
+        payload: searchTerm,
+      });
+    };
+  }, [searchTerm]);
+
   const handleSearch = React.useCallback(() => {
     if (searchTerm !== "") {
       dispatch(getData());
+      dispatch(appendHistory());
     }
-  }, [dispatch, getData, searchTerm]);
+    setSearchTerm("");
+  }, [appendHistory, dispatch, getData, searchTerm]);
 
   return (
-    <div className="App">
-      <h2>Search</h2>
+    <>
+      <Toolbar />
+      <Toolbar />
       <div className="search-container">
         <TextField
           id="search"
           label="Search"
           variant="outlined"
           margin="dense"
+          value={topicsState.searchValue}
           onChange={handleChange}
         />
         <Button variant="contained" color="primary" onClick={handleSearch}>
@@ -48,10 +62,10 @@ export const Topics = () => {
         </Button>
       </div>
       <div>
-        {allTopics.map((topic) => {
+        {topicsState.topics.map((topic) => {
           return <Topic key={uuidv4()} title={topic.title} url={topic.url} />;
         })}
       </div>
-    </div>
+    </>
   );
 };
