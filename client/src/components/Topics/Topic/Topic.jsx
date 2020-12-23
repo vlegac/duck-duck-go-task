@@ -10,14 +10,16 @@ import { topicStyles } from "./styles";
 
 export const Topic = ({ title, url }) => {
   const classes = topicStyles();
+
+  const handleRedirect = React.useCallback(() => {
+    window.location.assign(url);
+  }, [url]);
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} onClick={handleRedirect}>
       <CardActionArea>
         <CardHeader
           avatar={
-            <Avatar aria-label="recipe" className={classes.avatar}>
-              {title.substring(0, 2)}
-            </Avatar>
+            <Avatar className={classes.avatar}>{title.substring(0, 2)}</Avatar>
           }
         />
         <CardContent>
