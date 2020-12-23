@@ -38,6 +38,12 @@ export const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  drawer: {
+    [theme.breakpoints.up("sm")]: {
+      width: drawerWidth,
+      flexShrink: 0,
+    },
+  },
   drawerPaper: {
     position: "relative",
     whiteSpace: "nowrap",
@@ -61,8 +67,7 @@ export const useStyles = makeStyles((theme) => ({
   appBarSpacer: theme.mixins.toolbar,
   content: {
     flexGrow: 1,
-    height: "100vh",
-    overflow: "auto",
+    padding: theme.spacing(3),
   },
   container: {
     paddingTop: theme.spacing(4),

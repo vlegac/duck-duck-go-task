@@ -1,12 +1,10 @@
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Divider from "@material-ui/core/Divider";
-import Drawer from "@material-ui/core/Drawer";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import clsx from "clsx";
 import React from "react";
 import "./App.css";
+import { Sidebar } from "./components/Sidebar/Sidebar";
 import { Topics } from "./components/Topics/Topics";
 import { useStyles } from "./styles";
 
@@ -16,7 +14,7 @@ const App = () => {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="absolute" className={clsx(classes.appBar)}>
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar className={classes.toolbar}>
           <Typography
             component="h1"
@@ -29,19 +27,9 @@ const App = () => {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer
-        variant="permanent"
-        classes={{
-          paper: clsx(classes.drawerPaper),
-        }}
-        open
-      >
-        <Toolbar />
-        <div className={classes.searchHistory}>
-          <Typography variant="h6">Search History</Typography>
-        </div>
-        <Divider />
-      </Drawer>
+      <nav className={classes.drawer}>
+        <Sidebar />
+      </nav>
       <main className={classes.content}>
         <div className={classes.appBarSpacer}>
           <Topics />
