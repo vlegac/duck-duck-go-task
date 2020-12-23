@@ -1,5 +1,6 @@
 import React from "react";
+import Link from "@material-ui/core/Link";
 
 export const Topic = ({ title, url }) => {
-  return <div>{title}</div>;
+  return <Link href={url}>{title}</Link>;
 };
