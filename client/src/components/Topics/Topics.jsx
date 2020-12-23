@@ -6,11 +6,13 @@ import Button from "@material-ui/core/Button";
 import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import Toolbar from "@material-ui/core/Toolbar";
+import Grid from "@material-ui/core/Grid";
+import { topicsStyles } from "./styles";
 
 export const Topics = () => {
   const topicsState = useSelector((state) => state.topics);
   const dispatch = useDispatch();
-
+  const classes = topicsStyles();
   const [searchTerm, setSearchTerm] = React.useState(topicsState.searchValue);
   const handleChange = React.useCallback((event) => {
     setSearchTerm(event.target.value);
@@ -44,28 +46,41 @@ export const Topics = () => {
     setSearchTerm("");
   }, [appendHistory, dispatch, getData, searchTerm]);
 
+  React.useEffect(() => {
+    setSearchTerm(topicsState.searchValue);
+  }, [topicsState.searchValue]);
+
   return (
     <>
       <Toolbar />
-      <Toolbar />
-      <div className="search-container">
+      <div className={classes.searchContainer}>
         <TextField
           id="search"
           label="Search"
           variant="outlined"
           margin="dense"
-          value={topicsState.searchValue}
+          value={searchTerm}
           onChange={handleChange}
         />
-        <Button variant="contained" color="primary" onClick={handleSearch}>
+        <Button
+          className={classes.button}
+          variant="contained"
+          color="primary"
+          onClick={handleSearch}
+        >
           Search
         </Button>
       </div>
-      <div>
+      <Grid container spacing={3}>
         {topicsState.topics.map((topic) => {
-          return <Topic key={uuidv4()} title={topic.title} url={topic.url} />;
+          return (
+            <Grid key={uuidv4()} item xs={3}>
+              <Topic title={topic.title} url={topic.url} />
+            </Grid>
+          );
         })}
-      </div>
+      </Grid>
+      <div></div>
     </>
   );
 };
