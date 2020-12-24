@@ -1,13 +1,15 @@
-import React from "react";
-import { Topic } from "./Topic/Topic";
-import { v4 as uuidv4 } from "uuid";
-import TextField from "@material-ui/core/TextField";
+import { CircularProgress } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
-import Toolbar from "@material-ui/core/Toolbar";
 import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import Toolbar from "@material-ui/core/Toolbar";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { v4 as uuidv4 } from "uuid";
+import { HISTORY_TYPES, TOPIC_TYPES } from "../../redux/types";
+import { getTopicsData } from "../../utils/apis";
 import { topicsStyles } from "./styles";
+import { Topic } from "./Topic/Topic";
 
 export const Topics = () => {
   const topicsState = useSelector((state) => state.topics);
@@ -18,21 +20,18 @@ export const Topics = () => {
     setSearchTerm(event.target.value);
   }, []);
 
-  const getData = React.useCallback(() => {
-    return (dispatch) => {
-      axios.get(`http://localhost:8000/duck/${searchTerm}`).then((res) => {
-        dispatch({
-          type: "FETCH_TOPICS",
-          payload: res.data,
-        });
-      });
-    };
-  }, [searchTerm]);
+  const loadData = React.useCallback(async () => {
+    const data = await getTopicsData(searchTerm);
+    dispatch({
+      type: TOPIC_TYPES.FETCH_TOPICS,
+      payload: data,
+    });
+  }, [dispatch, searchTerm]);
 
   const appendHistory = React.useCallback(() => {
     return (dispatch) => {
       dispatch({
-        type: "UPDATE_HISTORY",
+        type: HISTORY_TYPES.UPDATE_HISTORY,
         payload: searchTerm,
       });
     };
@@ -40,11 +39,19 @@ export const Topics = () => {
 
   const handleSearch = React.useCallback(() => {
     if (searchTerm !== "") {
-      dispatch(getData());
+      dispatch({
+        type: TOPIC_TYPES.LOADING_TOPICS,
+        payload: true,
+      });
+      loadData();
       dispatch(appendHistory());
+      dispatch({
+        type: TOPIC_TYPES.LOADING_TOPICS,
+        payload: false,
+      });
     }
     setSearchTerm("");
-  }, [appendHistory, dispatch, getData, searchTerm]);
+  }, [appendHistory, dispatch, loadData, searchTerm]);
 
   React.useEffect(() => {
     setSearchTerm(topicsState.searchValue);
@@ -62,25 +69,31 @@ export const Topics = () => {
           value={searchTerm}
           onChange={handleChange}
         />
-        <Button
-          className={classes.button}
-          variant="contained"
-          color="primary"
-          onClick={handleSearch}
-        >
-          Search
-        </Button>
+
+        {topicsState.loading ? (
+          <CircularProgress color="primary" />
+        ) : (
+          <Button
+            className={classes.button}
+            variant="contained"
+            color="primary"
+            disabled={topicsState.loading}
+            onClick={handleSearch}
+          >
+            Search
+          </Button>
+        )}
       </div>
       <Grid container spacing={3}>
-        {topicsState.topics.map((topic) => {
-          return (
-            <Grid key={uuidv4()} item xs={3}>
-              <Topic title={topic.title} url={topic.url} />
-            </Grid>
-          );
-        })}
+        {topicsState.topics &&
+          topicsState.topics.map((topic) => {
+            return (
+              <Grid key={uuidv4()} item xs={3}>
+                <Topic title={topic.title} url={topic.url} />
+              </Grid>
+            );
+          })}
       </Grid>
-      <div></div>
     </>
   );
 };

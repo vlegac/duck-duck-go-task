@@ -8,7 +8,7 @@ module.exports = {
     };
     searchQuerys.searchedTerms.push({ term: query });
     let saveQueryData = JSON.stringify(searchQuerys, null, 2);
-    fs.writeFileSync("api/history/searchedHistory.json", saveQueryData);
+    fs.writeFileSync("searchedHistory.json", saveQueryData);
   },
 
   // Read and append into history.json
@@ -17,11 +17,11 @@ module.exports = {
       searchedTerms: [],
     };
 
-    const historyData = fs.readFileSync("api/history/searchedHistory.json");
+    const historyData = fs.readFileSync("searchedHistory.json");
 
     searchQuerys = JSON.parse(historyData);
     searchQuerys.searchedTerms.push({ term: query });
     let saveQueryData = JSON.stringify(searchQuerys, null, 2);
-    fs.writeFileSync("api/history/searchedHistory.json", saveQueryData);
+    fs.writeFileSync("searchedHistory.json", saveQueryData);
   },
 };

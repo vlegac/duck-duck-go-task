@@ -12,7 +12,7 @@ router.get("/:term", async (req, res, next) => {
   if (error) {
     res.status(500).json({ error: error });
   } else {
-    const fileExists = fs.existsSync("api/history/searchedHistory.json");
+    const fileExists = fs.existsSync("searchedHistory.json");
     if (fileExists) {
       helpers.appendQuery(query);
     } else {
@@ -28,7 +28,7 @@ router.post("/", async (req, res, next) => {
   if (error) {
     res.status(500).json({ error: error });
   } else {
-    const fileExists = fs.existsSync("api/history/searchedHistory.json");
+    const fileExists = fs.existsSync("searchedHistory.json");
     if (fileExists) {
       helpers.appendQuery(query);
     } else {
