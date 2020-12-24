@@ -20,7 +20,7 @@ For the frontend I used:
 5. Redux
 6. React-redux
 
-Download project or clone from GitHub from dev branch.
+Download project or clone from GitHub.
 To install the dependencies position in the root folder and execute the next instructions in the terminal.
 
 ```sh
