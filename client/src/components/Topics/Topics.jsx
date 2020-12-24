@@ -8,6 +8,7 @@ import axios from "axios";
 import Toolbar from "@material-ui/core/Toolbar";
 import Grid from "@material-ui/core/Grid";
 import { topicsStyles } from "./styles";
+import { TOPIC_TYPES, HISTORY_TYPES } from "../../redux/types";
 
 export const Topics = () => {
   const topicsState = useSelector((state) => state.topics);
@@ -22,7 +23,7 @@ export const Topics = () => {
     return (dispatch) => {
       axios.get(`http://localhost:8000/duck/${searchTerm}`).then((res) => {
         dispatch({
-          type: "FETCH_TOPICS",
+          type: TOPIC_TYPES.FETCH_TOPICS,
           payload: res.data,
         });
       });
@@ -32,7 +33,7 @@ export const Topics = () => {
   const appendHistory = React.useCallback(() => {
     return (dispatch) => {
       dispatch({
-        type: "UPDATE_HISTORY",
+        type: HISTORY_TYPES.UPDATE_HISTORY,
         payload: searchTerm,
       });
     };
@@ -40,8 +41,16 @@ export const Topics = () => {
 
   const handleSearch = React.useCallback(() => {
     if (searchTerm !== "") {
+      dispatch({
+        type: TOPIC_TYPES.FETCH_TOPICS,
+        payload: true,
+      });
       dispatch(getData());
       dispatch(appendHistory());
+      dispatch({
+        type: TOPIC_TYPES.FETCH_TOPICS,
+        payload: false,
+      });
     }
     setSearchTerm("");
   }, [appendHistory, dispatch, getData, searchTerm]);
@@ -66,19 +75,21 @@ export const Topics = () => {
           className={classes.button}
           variant="contained"
           color="primary"
+          disabled={topicsState.loading}
           onClick={handleSearch}
         >
           Search
         </Button>
       </div>
       <Grid container spacing={3}>
-        {topicsState.topics.map((topic) => {
-          return (
-            <Grid key={uuidv4()} item xs={3}>
-              <Topic title={topic.title} url={topic.url} />
-            </Grid>
-          );
-        })}
+        {topicsState.topics &&
+          topicsState.topics.map((topic) => {
+            return (
+              <Grid key={uuidv4()} item xs={3}>
+                <Topic title={topic.title} url={topic.url} />
+              </Grid>
+            );
+          })}
       </Grid>
       <div></div>
     </>
