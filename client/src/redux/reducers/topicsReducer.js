@@ -10,6 +10,7 @@ const topicsReducer = (state = initialState, action) => {
 
   switch (type) {
     case TOPIC_TYPES.LOADING_TOPICS:
+      console.log(payload);
       return { ...state, loading: payload };
     case TOPIC_TYPES.FETCH_TOPICS:
       return { ...state, topics: payload };
