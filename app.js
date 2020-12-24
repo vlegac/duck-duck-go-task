@@ -3,8 +3,9 @@ const app = express();
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const { createProxyMiddleware } = require("http-proxy-middleware");
 
+const duckRoutes = require("./api/routes/duck");
+const historyRoutes = require("./api/routes/history");
 // Morgan usage - logger handle plugin
 app.use(morgan("dev"));
 
@@ -14,6 +15,17 @@ app.use(bodyParser.json());
 
 // Enable CORS
 app.use(cors());
+
+// Info GET endpoint
+app.get("/info", (req, res, next) => {
+  res.send(
+    "This is a proxy service which proxies to Billing and Account APIs."
+  );
+});
+
+// Routes which should handle requests
+app.use("/duck", duckRoutes);
+app.use("/history", historyRoutes);
 
 // Error handler if in url is neither of api calls from above
 app.use((req, res, next) => {
